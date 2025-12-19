@@ -11,11 +11,20 @@ export class AuthService {
     private readonly prismaService: PrismaService,
   ) {}
 
-  login(loginAuthDto: LoginAuthDto) {
-    // TODO: does the user exist in database?
+  async login(loginAuthDto: LoginAuthDto) {
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        username: loginAuthDto.username,
+      },
+    });
+
+    if (!user || user.password !== loginAuthDto.password) {
+      throw new HttpException('Username or password is incorrect.', 400);
+    }
 
     return {
       token: this.jwtService.sign({
+        id: user.id,
         username: loginAuthDto.username,
       }),
     };
