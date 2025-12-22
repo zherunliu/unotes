@@ -3,12 +3,14 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CryptoService } from 'src/crypto/crypto.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
+    private readonly cryptoService: CryptoService,
   ) {}
 
   async login(loginAuthDto: LoginAuthDto) {
@@ -17,8 +19,10 @@ export class AuthService {
         username: loginAuthDto.username,
       },
     });
-
-    if (!user || user.password !== loginAuthDto.password) {
+    if (
+      !user ||
+      !this.cryptoService.verity(loginAuthDto.password, user.password)
+    ) {
       throw new HttpException('Username or password is incorrect.', 400);
     }
 
@@ -39,8 +43,20 @@ export class AuthService {
     if (res) {
       return new HttpException('Username has already exist.', 400);
     }
-    return this.prismaService.user.create({
-      data: createAuthDto,
-    });
+    try {
+      await this.prismaService.user.create({
+        data: {
+          username: createAuthDto.username,
+          password: this.cryptoService.encrypt(createAuthDto.password),
+        },
+      });
+      return {
+        code: 200,
+        message: 'Registration successful.',
+      };
+    } catch (err) {
+      console.log('Registration failed:', err);
+      throw new HttpException('Registration failed.', 401);
+    }
   }
 }
