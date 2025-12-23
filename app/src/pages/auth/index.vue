@@ -21,9 +21,10 @@ const isLogin = ref(true);
   </view>
 </template>
 
-<style lang="sass" scoped>
-.auth-footer
-  padding: 0 40rpx
-  color: #007aff
-  font-size: 24rpx
+<style lang="scss" scoped>
+.auth-footer {
+  padding: 0 40rpx;
+  color: #007aff;
+  font-size: 24rpx;
+}
 </style>

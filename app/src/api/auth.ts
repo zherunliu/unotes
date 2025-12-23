@@ -1,5 +1,5 @@
 import request from "@/utils/axios";
-import { IUser } from "@/types/auth";
+import type { IUser } from "@/types/auth";
 
 export const loginApi = (data: IUser) => request.post("/auth/login", data);
 

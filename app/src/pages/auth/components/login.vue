@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { loginApi } from "@/api/auth";
-import { IUser } from "@/types/auth";
+import type { IUser } from "@/types/auth";
 
 const formData = ref<IUser>({
   username: "",
@@ -53,8 +53,10 @@ const submit = async () => {
   </view>
 </template>
 
-<style lang="sass" scoped>
-.login
-  .login-container
-    padding: 0 40rpx
+<style lang="scss" scoped>
+.login {
+  .login-container {
+    padding: 0 40rpx;
+  }
+}
 </style>
