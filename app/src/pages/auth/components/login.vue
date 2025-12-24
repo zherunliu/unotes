@@ -16,9 +16,7 @@ const submit = async () => {
       title: "登录成功",
       icon: "success",
     });
-    uni.reLaunch({
-      url: "/pages/index/index",
-    });
+    uni.switchTab({ url: "/pages/index/index" });
   } catch (err) {
     console.error("登录失败：", err);
     uni.showToast({
