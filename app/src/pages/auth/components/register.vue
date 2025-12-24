@@ -29,8 +29,8 @@ const submit = async () => {
 </script>
 
 <template>
-  <view class="login">
-    <view class="login-container">
+  <view class="register">
+    <view class="register-container">
       <uni-forms :modelValue="formData">
         <uni-forms-item label="用户名" prop="username" required>
           <uni-easyinput
@@ -53,8 +53,8 @@ const submit = async () => {
 </template>
 
 <style lang="scss" scoped>
-.login {
-  .login-container {
+.register {
+  .register-container {
     padding: 0 40rpx;
   }
 }
