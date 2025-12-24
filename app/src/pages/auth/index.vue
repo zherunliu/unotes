@@ -24,7 +24,7 @@ const isLogin = ref(true);
 <style lang="scss" scoped>
 .auth-footer {
   padding: 0 40rpx;
-  color: #007aff;
+  color: $uni-color-primary;
   font-size: 24rpx;
 }
 </style>
