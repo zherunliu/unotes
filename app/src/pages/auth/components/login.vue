@@ -11,7 +11,7 @@ const formData = ref<IUser>({
 const submit = async () => {
   try {
     const res = await loginApi(formData.value);
-    uni.setStorageSync("token", res.token);
+    uni.setStorageSync("token", res.data.token);
     uni.switchTab({ url: "/pages/index/index" });
   } catch (err) {
     console.error("登录失败：", err);

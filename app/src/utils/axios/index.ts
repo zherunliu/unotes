@@ -35,7 +35,7 @@ instance.interceptors.response.use((response) => {
     icon: "success",
     mask: true,
   });
-  return response.data;
+  return response;
 });
 
 export default instance;
