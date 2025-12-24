@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { CryptoService } from './crypto/crypto.service';
 import { CryptoModule } from './crypto/crypto.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CryptoModule } from './crypto/crypto.module';
     UserModule,
     PrismaModule,
     CryptoModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService, CryptoService],
