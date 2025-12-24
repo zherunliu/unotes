@@ -12,17 +12,9 @@ const submit = async () => {
   try {
     const res = await loginApi(formData.value);
     uni.setStorageSync("token", res.token);
-    uni.showToast({
-      title: "登录成功",
-      icon: "success",
-    });
     uni.switchTab({ url: "/pages/index/index" });
   } catch (err) {
     console.error("登录失败：", err);
-    uni.showToast({
-      title: "登录失败",
-      icon: "error",
-    });
   }
 };
 </script>
@@ -45,7 +37,7 @@ const submit = async () => {
             placeholder="请输入密码"
           />
         </uni-forms-item>
-        <button type="primary" @click="submit">登录</button>
+        <button class="button-primary" @click="submit">登录</button>
       </uni-forms>
     </view>
   </view>
@@ -56,5 +48,9 @@ const submit = async () => {
   .login-container {
     padding: 0 40rpx;
   }
+}
+.button-primary {
+  background-color: $uni-icon-color-active;
+  color: $uni-text-color-inverse;
 }
 </style>

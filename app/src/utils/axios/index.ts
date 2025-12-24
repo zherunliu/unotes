@@ -7,12 +7,34 @@ const instance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
-instance.interceptors.request.use((config) => {
-  return config;
-});
+instance.interceptors.request.use(
+  (config) => {
+    uni.showLoading({
+      title: "加载中...",
+    });
+    return config;
+  },
+  (err) => {
+    uni.hideLoading();
+    return Promise.reject(err);
+  }
+);
 
 instance.interceptors.response.use((response) => {
-  console.log(response);
+  uni.hideLoading();
+  const { data, status } = response;
+  if (status !== 201) {
+    uni.showToast({
+      title: data.message || "请求失败",
+      icon: "none",
+    });
+    return Promise.reject(data);
+  }
+  uni.showToast({
+    title: "请求成功",
+    icon: "success",
+    mask: true,
+  });
   return response.data;
 });
 

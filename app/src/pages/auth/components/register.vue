@@ -11,19 +11,11 @@ const formData = ref<IUser>({
 const submit = async () => {
   try {
     await registerApi(formData.value);
-    uni.showToast({
-      title: "注册成功",
-      icon: "success",
-    });
     uni.reLaunch({
       url: "/pages/auth/index",
     });
   } catch (err) {
     console.error("注册失败：", err);
-    uni.showToast({
-      title: "注册失败",
-      icon: "error",
-    });
   }
 };
 </script>
@@ -46,7 +38,7 @@ const submit = async () => {
             placeholder="请输入密码"
           />
         </uni-forms-item>
-        <button type="primary" @click="submit">注册</button>
+        <button class="button-primary" @click="submit">注册</button>
       </uni-forms>
     </view>
   </view>
@@ -57,5 +49,9 @@ const submit = async () => {
   .register-container {
     padding: 0 40rpx;
   }
+}
+.button-primary {
+  background-color: $uni-icon-color-active;
+  color: $uni-text-color-inverse;
 }
 </style>
