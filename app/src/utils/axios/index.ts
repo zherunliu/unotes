@@ -13,6 +13,9 @@ instance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = token;
     }
+    if (!config.headers["Content-Type"]) {
+      config.headers["Content-Type"] = "application/json";
+    }
     uni.showLoading({
       title: "加载中...",
     });
@@ -24,22 +27,28 @@ instance.interceptors.request.use(
   }
 );
 
-instance.interceptors.response.use((response) => {
-  uni.hideLoading();
-  const { data, status } = response;
-  if (status !== 201) {
+instance.interceptors.response.use(
+  (response) => {
+    uni.hideLoading();
+    const { data, status } = response;
+    if (status >= 200 && status < 300) {
+      uni.showToast({
+        title: "请求成功",
+        icon: "success",
+        mask: true,
+      });
+      return response;
+    }
     uni.showToast({
       title: data.message || "请求失败",
       icon: "none",
     });
     return Promise.reject(data);
+  },
+  (err) => {
+    uni.hideLoading();
+    return Promise.reject(err);
   }
-  uni.showToast({
-    title: "请求成功",
-    icon: "success",
-    mask: true,
-  });
-  return response;
-});
+);
 
 export default instance;

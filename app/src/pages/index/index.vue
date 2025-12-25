@@ -1,17 +1,30 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { getArticleListApi } from "@/api/article";
+import type { IArticle } from "@/types/article";
+import { onMounted, ref } from "vue";
+
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+interface IArticleItem extends IArticle {
+  id: number;
+}
+const articleList = ref<IArticleItem[]>([]);
+const getList = async () => {
+  const res = await getArticleListApi();
+  articleList.value = res.data;
+};
+
+onMounted(getList);
+</script>
 
 <template>
   <view>
-    <view class="list-item">
-      <view class="title">This is article title</view>
+    <view class="list-item" v-for="item of articleList" :key="item.id">
+      <view class="title">{{ item.title }}</view>
       <view class="content">
-        <img src="../../static/logo.png" />
+        <img v-if="item.img" :src="`${baseUrl}/${item.img}`" />
         <view class="text">
           <p>
-            This is the article content. This is the article content. This is
-            the article content. This is the article content. This is the
-            article content. This is the article content. This is the article
-            content.
+            {{ item.content }}
           </p>
         </view>
       </view>

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { AuthGuard } from 'src/guard/auth.guard';
@@ -15,5 +15,10 @@ export class ArticleController {
     @GetTokenInfo('id') id: number,
   ) {
     return this.articleService.create(createArticleDto, +id);
+  }
+
+  @Get()
+  findByAuthor(@GetTokenInfo('id') id: number) {
+    return this.articleService.findByAuthor(+id);
   }
 }

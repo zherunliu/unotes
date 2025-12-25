@@ -23,4 +23,23 @@ export class ArticleService {
       throw new HttpException('Article creation failed.', 400);
     }
   }
+
+  async findByAuthor(id: number) {
+    try {
+      const res = await this.prismaService.article.findMany({
+        where: { authorId: id },
+        include: {
+          author: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      });
+      return res;
+    } catch (err) {
+      console.log('Data load failed.', err);
+      throw new HttpException('Data load failed.', 500);
+    }
+  }
 }

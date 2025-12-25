@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { postArticle } from "@/api/article";
+import { postArticleApi } from "@/api/article";
 import { reactive, ref } from "vue";
 
 const formData = reactive({
@@ -33,12 +33,12 @@ const handleSelect = (e: any) => {
   const tempFilePath = e.tempFilePaths[0];
   uni.uploadFile({
     fileType: "image",
-    url: "http://localhost:3000/upload",
+    url: import.meta.env.VITE_API_BASE_URL + "/upload",
     filePath: tempFilePath,
     name: "file",
     success: (uploadFileRes) => {
       const data = JSON.parse(uploadFileRes.data);
-      formData.img = `${data.destination}/${data.filename}`;
+      formData.img = data.filename;
     },
     fail: (err) => {
       uni.showToast({
@@ -55,7 +55,7 @@ const submit = () => {
   form.value
     .validate()
     .then(async () => {
-      const res = await postArticle(formData);
+      const res = await postArticleApi(formData);
       console.log(res);
     })
     .catch((err: any) => {
