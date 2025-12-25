@@ -33,9 +33,13 @@ export class AuthGuard implements CanActivate {
       throw new Error('Token is missing or invalid');
     }
     try {
-      this.jwtService.verify(token, {
-        secret: this.configService.get('JWT_SECRET'),
-      });
+      const res = this.jwtService.verify<{ id: number; username: string }>(
+        token,
+        {
+          secret: this.configService.get('JWT_SECRET'),
+        },
+      );
+      req.user = res;
     } catch (err) {
       console.error('JWT verification failed:', err);
       throw new HttpException('Login has expired. Please log in again.', 401);

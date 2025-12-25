@@ -9,6 +9,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
+    const token = uni.getStorageSync("token");
+    if (token) {
+      config.headers.Authorization = token;
+    }
     uni.showLoading({
       title: "加载中...",
     });
