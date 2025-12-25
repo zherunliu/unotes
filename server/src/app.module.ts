@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CryptoService } from './crypto/crypto.service';
 import { CryptoModule } from './crypto/crypto.module';
 import { ArticleModule } from './article/article.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ArticleModule } from './article/article.module';
     PrismaModule,
     CryptoModule,
     ArticleModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService, CryptoService],
