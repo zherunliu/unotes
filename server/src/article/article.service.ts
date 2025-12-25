@@ -1,9 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ArticleService {
-  create(createArticleDto: CreateArticleDto) {
-    return 'This action adds a new article';
+  constructor(private readonly prismaService: PrismaService) {}
+  async create(createArticleDto: CreateArticleDto, authorId: number) {
+    try {
+      const data = {
+        ...createArticleDto,
+        authorId,
+      };
+      await this.prismaService.article.create({
+        data,
+      });
+      return {
+        code: 200,
+        message: 'Created successfully.',
+      };
+    } catch (err) {
+      console.log('Article creation failed.', err);
+      throw new HttpException('Article creation failed.', 400);
+    }
   }
 }

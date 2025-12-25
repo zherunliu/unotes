@@ -9,6 +9,15 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 
+declare module 'express' {
+  interface Request {
+    user?: {
+      id: number;
+      username: string;
+    };
+  }
+}
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -20,7 +29,6 @@ export class AuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req: Request = context.switchToHttp().getRequest();
     const token = req.headers.authorization;
-    console.log(this.configService.get('JWT_SECRET'));
     if (!token) {
       throw new Error('Token is missing or invalid');
     }
