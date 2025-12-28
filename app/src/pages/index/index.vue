@@ -13,12 +13,21 @@ const getList = async () => {
   articleList.value = res.data;
 };
 
+const toDetail = (id: number) => {
+  uni.navigateTo({ url: `/pages/detail/index?id=${id}` });
+};
+
 onMounted(getList);
 </script>
 
 <template>
   <view>
-    <view class="list-item" v-for="item of articleList" :key="item.id">
+    <view
+      class="list-item"
+      v-for="item of articleList"
+      :key="item.id"
+      @click="toDetail(item.id)"
+    >
       <view class="title">{{ item.title }}</view>
       <view class="content">
         <img v-if="item.img" :src="`${baseUrl}/${item.img}`" />

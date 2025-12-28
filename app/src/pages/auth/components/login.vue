@@ -14,7 +14,7 @@ const submit = async () => {
     uni.setStorageSync("token", res.data.token);
     uni.switchTab({ url: "/pages/index/index" });
   } catch (err) {
-    console.error("登录失败：", err);
+    console.error("Login failed.", err);
   }
 };
 </script>

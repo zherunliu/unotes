@@ -21,7 +21,7 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "uni-app"
+        "navigationBarTitleText": "home"
       }
     },
     {
@@ -34,6 +34,12 @@
       "path": "pages/personal/index",
       "style": {
         "navigationBarTitleText": "personal"
+      }
+    },
+    {
+      "path": "pages/detail/index",
+      "style": {
+        "navigationBarTitleText": "detail"
       }
     }
   ],
