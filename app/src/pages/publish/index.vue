@@ -85,6 +85,7 @@ const submit = () => {
           v-model="formData.content"
           type="textarea"
           placeholder="请输入文章内容"
+          :maxlength="2000"
         />
       </uni-forms-item>
       <uni-forms-item label="上传文件" name="img">
