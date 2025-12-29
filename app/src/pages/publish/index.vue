@@ -9,12 +9,24 @@ const formDataDefault = {
   img: "",
 };
 
+interface IImage {
+  url: string;
+}
+
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const formData = reactive({ ...formDataDefault });
+const imgList = ref<IImage[]>([]);
 
 const getArticle = async (id: number) => {
   const res = await getArticleApi(id);
   Object.assign(formData, res.data);
-  console.log(formData);
+  if (formData.img) {
+    imgList.value = [
+      {
+        url: baseUrl + "/" + formData.img,
+      },
+    ];
+  }
 };
 
 const editData = reactive({
@@ -37,6 +49,7 @@ const handleCancel = () => {
   editData.isEdit = false;
   editData.articleId = 0;
   Object.assign(formData, formDataDefault);
+  imgList.value = [];
 };
 
 onHide(handleCancel);
@@ -64,9 +77,10 @@ const rules = {
 
 const handleSelect = (e: any) => {
   const tempFilePath = e.tempFilePaths[0];
+  imgList.value = [{ url: tempFilePath }];
   uni.uploadFile({
     fileType: "image",
-    url: import.meta.env.VITE_API_BASE_URL + "/upload",
+    url: baseUrl + "upload",
     filePath: tempFilePath,
     name: "file",
     success: (uploadFileRes) => {
@@ -93,7 +107,7 @@ const editArticle = async (id: number) => {
       uni.switchTab({ url: "/pages/index/index" });
     })
     .catch((err: any) => {
-      console.log("表单验证失败", err);
+      console.log("Edit failed.", err);
     });
 };
 
@@ -106,7 +120,7 @@ const submit = () => {
       uni.switchTab({ url: "/pages/index/index" });
     })
     .catch((err: any) => {
-      console.log("表单验证失败", err);
+      console.log("Add failed.", err);
     });
 };
 </script>
@@ -137,10 +151,11 @@ const submit = () => {
       </uni-forms-item>
       <uni-forms-item label="上传文件" name="img">
         <uni-file-picker
-          v-model="formData.img"
+          v-model="imgList"
           :limit="1"
           file-mediatype="image"
           @select="handleSelect"
+          @delete="formData.img = ''"
         />
       </uni-forms-item>
       <button v-if="!editData.isEdit" class="button-primary" @click="submit()">
