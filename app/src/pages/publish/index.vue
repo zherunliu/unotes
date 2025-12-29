@@ -1,12 +1,45 @@
 <script setup lang="ts">
-import { postArticleApi } from "@/api/article";
+import { postArticleApi, getArticleApi, updateArticleApi } from "@/api/article";
+import { onHide, onShow } from "@dcloudio/uni-app";
 import { reactive, ref } from "vue";
 
-const formData = reactive({
+const formDataDefault = {
   title: "",
   content: "",
   img: "",
+};
+
+const formData = reactive({ ...formDataDefault });
+
+const getArticle = async (id: number) => {
+  const res = await getArticleApi(id);
+  Object.assign(formData, res.data);
+  console.log(formData);
+};
+
+const editData = reactive({
+  isEdit: false,
+  articleId: 0,
 });
+
+onShow(() => {
+  const id = uni.$appParams?.id;
+  if (id) {
+    // 清空全局变量，避免后续干扰
+    uni.$appParams = undefined;
+    editData.articleId = id;
+    editData.isEdit = true;
+    getArticle(editData.articleId);
+  }
+});
+
+const handleCancel = () => {
+  editData.isEdit = false;
+  editData.articleId = 0;
+  Object.assign(formData, formDataDefault);
+};
+
+onHide(handleCancel);
 
 const form = ref();
 
@@ -49,6 +82,19 @@ const handleSelect = (e: any) => {
       console.error("File upload failed.", err);
     },
   });
+};
+
+const editArticle = async (id: number) => {
+  form.value
+    .validate()
+    .then(async () => {
+      const res = await updateArticleApi(id, formData);
+      console.log(res);
+      uni.switchTab({ url: "/pages/index/index" });
+    })
+    .catch((err: any) => {
+      console.log("表单验证失败", err);
+    });
 };
 
 const submit = () => {
@@ -96,7 +142,15 @@ const submit = () => {
           @select="handleSelect"
         />
       </uni-forms-item>
-      <button class="button-primary" @click="submit">提交</button>
+      <button v-if="!editData.isEdit" class="button-primary" @click="submit()">
+        提交
+      </button>
+      <view v-else>
+        <button class="button-primary" @click="editArticle(editData.articleId)">
+          修改
+        </button>
+        <button @click="handleCancel">取消</button>
+      </view>
     </uni-forms>
   </view>
 </template>

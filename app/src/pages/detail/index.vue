@@ -4,10 +4,22 @@ import { deleteArticleApi, getArticleApi } from "@/api/article";
 import { ref } from "vue";
 import dayjs from "dayjs";
 
+declare global {
+  interface Uni {
+    $appParams?: { id: number };
+  }
+}
+
 const article = ref();
 const getArticle = async (id: number) => {
   const res = await getArticleApi(id);
   article.value = res.data;
+};
+
+const toEdit = (id: number) => {
+  /* switchTab 不支持传递 URL 参数，此处使用全局变量挂载（不推荐） */
+  uni.$appParams = { id: id };
+  uni.switchTab({ url: "/pages/publish/index" });
 };
 
 onLoad((data) => {
@@ -31,7 +43,7 @@ const deleteArticle = (id: number) => {
     </view>
 
     <view>
-      <button>编辑</button>
+      <button @click="toEdit(article.id)">编辑</button>
       <button @click="deleteArticle(article.id)">删除</button>
     </view>
   </view>
