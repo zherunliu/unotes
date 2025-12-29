@@ -55,13 +55,14 @@ onShow(getList);
     img {
       width: 160rpx;
       height: 160rpx;
+      object-fit: cover;
     }
     display: flex;
     gap: 20rpx;
     p {
       font-size: 25rpx;
       line-height: 40rpx;
-      height: 160rpx;
+      max-height: 160rpx;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;

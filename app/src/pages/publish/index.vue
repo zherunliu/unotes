@@ -103,6 +103,7 @@ const submit = () => {
     .then(async () => {
       const res = await postArticleApi(formData);
       console.log(res);
+      uni.switchTab({ url: "/pages/index/index" });
     })
     .catch((err: any) => {
       console.log("表单验证失败", err);
@@ -145,7 +146,7 @@ const submit = () => {
       <button v-if="!editData.isEdit" class="button-primary" @click="submit()">
         提交
       </button>
-      <view v-else>
+      <view class="button-group" v-else>
         <button class="button-primary" @click="editArticle(editData.articleId)">
           修改
         </button>
@@ -162,5 +163,12 @@ const submit = () => {
 .button-primary {
   background-color: $uni-icon-color-active;
   color: $uni-text-color-inverse;
+}
+.button-group {
+  display: flex;
+  gap: 20rpx;
+  button {
+    width: 100%;
+  }
 }
 </style>
