@@ -62,12 +62,12 @@ const deleteArticle = (id: number) => {
   .title {
     text-align: center;
     p {
-      font-size: 30rpx;
+      font-size: 35rpx;
       font-weight: bold;
       color: $uni-text-color;
     }
     color: $uni-text-color-grey;
-    font-size: 20rpx;
+    font-size: 25rpx;
     margin-bottom: 20rpx;
   }
   .content {
@@ -76,7 +76,7 @@ const deleteArticle = (id: number) => {
       height: 400rpx;
       object-fit: contain;
     }
-    font-size: 25rpx;
+    font-size: 30rpx;
     margin-bottom: 20rpx;
   }
   .button-group {
