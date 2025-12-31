@@ -24,3 +24,9 @@ pnpm dlx degit dcloudio/uni-preset-vue#vite-ts app
 ```bash
 pnpm add @dcloudio/uni-ui
 ```
+
+浅克隆仓库
+
+```
+git clone --depth 1 <repository>
+```
