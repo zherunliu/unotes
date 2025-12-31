@@ -25,6 +25,11 @@ const rules = {
         required: true,
         errorMessage: "请输入新密码",
       },
+      {
+        minLength: 6,
+        maxLength: 20,
+        errorMessage: "密码长度应为 6 到 20 个字符",
+      },
     ],
   },
   confirmPassword: {
@@ -32,6 +37,11 @@ const rules = {
       {
         required: true,
         errorMessage: "请再次输入新密码",
+      },
+      {
+        minLength: 6,
+        maxLength: 20,
+        errorMessage: "密码长度应为 6 到 20 个字符",
       },
     ],
   },
