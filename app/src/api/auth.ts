@@ -1,5 +1,6 @@
 import request from "@/utils/axios";
 import type { IUser } from "@/types/auth";
+import type { IAuth } from "@/types/auth";
 
 export const loginApi = (data: IUser) =>
   request.post<{
@@ -8,3 +9,5 @@ export const loginApi = (data: IUser) =>
 
 export const registerApi = (data: IUser) =>
   request.post("/auth/register", data);
+
+export const updatePasswordApi = (data: IAuth) => request.patch("/auth", data);

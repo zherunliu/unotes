@@ -13,7 +13,7 @@ export class CryptoService {
     return hmac.update(data).digest('hex');
   }
 
-  verity(data: string, hash: string): boolean {
+  verify(data: string, hash: string): boolean {
     return this.encrypt(data) === hash;
   }
 }
