@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { getArticleListApi } from "@/api/article";
 import type { IArticle } from "@/types/article";
-import { onShow } from "@dcloudio/uni-app";
+import { onLoad } from "@dcloudio/uni-app";
 import { ref } from "vue";
+import { onPullDownRefresh } from "@dcloudio/uni-app";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 interface IArticleItem extends IArticle {
@@ -18,7 +19,11 @@ const toDetail = (id: number) => {
   uni.navigateTo({ url: `/pages/detail/index?id=${id}` });
 };
 
-onShow(getList);
+onPullDownRefresh(() => {
+  getList().then(uni.stopPullDownRefresh);
+});
+
+onLoad(getList);
 </script>
 
 <template>
