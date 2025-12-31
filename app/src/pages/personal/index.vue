@@ -2,8 +2,8 @@
 import { deleteUserApi, getUserApi, updateUserApi } from "@/api/user";
 import { ref } from "vue";
 import dayjs from "dayjs";
-import { onShow } from "@dcloudio/uni-app";
-import { IProfile } from "@/types/user";
+import { onLoad } from "@dcloudio/uni-app";
+import type { IProfile } from "@/types/user";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const userInfo = ref();
@@ -66,19 +66,23 @@ const getUser = () =>
 
 const logout = () => {
   uni.removeStorageSync("token");
-  uni.navigateTo({ url: "/pages/auth/index" });
+  uni.reLaunch({ url: "/pages/auth/index" });
 };
 
 const deleteUser = async () => {
   try {
     await deleteUserApi();
-    uni.navigateTo({ url: "/pages/auth/index" });
+    uni.reLaunch({ url: "/pages/auth/index" });
   } catch (err) {
     console.log("Delete failed.", err);
   }
 };
 
-onShow(getUser);
+const toPassword = () => {
+  uni.navigateTo({ url: "/pages/auth/password" });
+};
+
+onLoad(getUser);
 </script>
 
 <template>
@@ -101,7 +105,7 @@ onShow(getUser);
     </view>
     <view class="list-items">
       <p @click="popupChangeName.open('center')">昵称修改</p>
-      <p>密码修改</p>
+      <p @click="toPassword">密码修改</p>
       <p @click="logout">退出登录</p>
       <p @click="popupDelete.open('center')">注销账号</p>
     </view>

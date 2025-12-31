@@ -23,7 +23,7 @@ const submit = async () => {
 <template>
   <view class="register">
     <view class="register-container">
-      <uni-forms :modelValue="formData">
+      <uni-forms :model="formData">
         <uni-forms-item label="用户名" prop="username" required>
           <uni-easyinput
             type="text"

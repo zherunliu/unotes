@@ -127,13 +127,7 @@ const submit = () => {
 
 <template>
   <view class="publish">
-    <uni-forms
-      ref="form"
-      :rules="rules"
-      :model="formData"
-      labelWidth="80"
-      label-position="top"
-    >
+    <uni-forms ref="form" :rules="rules" :model="formData" label-position="top">
       <uni-forms-item required label="文章标题" name="title">
         <uni-easyinput
           v-model="formData.title"
