@@ -1,14 +1,53 @@
 <script setup lang="ts">
-import { getUserApi, updateUserApi } from "@/api/user";
-import { onMounted, ref } from "vue";
+import { deleteUserApi, getUserApi, updateUserApi } from "@/api/user";
+import { ref } from "vue";
 import dayjs from "dayjs";
+import { onShow } from "@dcloudio/uni-app";
+import { IProfile } from "@/types/user";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const userInfo = ref();
-const popup = ref();
+const popupChangeName = ref();
+const popupDelete = ref();
 const newName = ref("");
 
-const confirmName = async () => {
+const editUserInfo = async (editData: IProfile) => {
+  try {
+    await updateUserApi(editData);
+    getUser();
+  } catch (err) {
+    console.log("Update failed.", err);
+  }
+};
+
+const changeAvatar = () => {
+  uni.chooseImage({
+    count: 1,
+    success: (res: any) => {
+      console.log(res);
+      uni.uploadFile({
+        fileType: "image",
+        url: baseUrl + "/upload",
+        filePath: res.tempFilePaths[0],
+        name: "file",
+        success: (uploadFileRes) => {
+          const data = JSON.parse(uploadFileRes.data);
+          editUserInfo({ avatar: data.filename });
+        },
+        fail: (err) => {
+          uni.showToast({
+            title: "上传失败",
+            icon: "error",
+            mask: true,
+          });
+          console.error("File upload failed.", err);
+        },
+      });
+    },
+  });
+};
+
+const confirmName = () => {
   if (newName.value === "") {
     uni.showToast({
       title: "Username can not be null.",
@@ -16,12 +55,7 @@ const confirmName = async () => {
       mask: true,
     });
   } else {
-    try {
-      await updateUserApi({ ...userInfo.value, username: newName.value });
-      getUser();
-    } catch (err) {
-      console.log("Update failed.", err);
-    }
+    editUserInfo({ username: newName.value });
   }
 };
 
@@ -30,7 +64,21 @@ const getUser = () =>
     userInfo.value = res.data;
   });
 
-onMounted(getUser);
+const logout = () => {
+  uni.removeStorageSync("token");
+  uni.navigateTo({ url: "/pages/auth/index" });
+};
+
+const deleteUser = async () => {
+  try {
+    await deleteUserApi();
+    uni.navigateTo({ url: "/pages/auth/index" });
+  } catch (err) {
+    console.log("Delete failed.", err);
+  }
+};
+
+onShow(getUser);
 </script>
 
 <template>
@@ -42,6 +90,7 @@ onMounted(getUser);
             ? `${baseUrl}/${userInfo.avatar}`
             : '../../static/tabbar/personal.png'
         "
+        @click="changeAvatar"
       />
       <view class="content">
         <p class="name">{{ userInfo.username }}</p>
@@ -51,28 +100,41 @@ onMounted(getUser);
       </view>
     </view>
     <view class="list-items">
-      <p @click="popup.open('center')">昵称修改</p>
+      <p @click="popupChangeName.open('center')">昵称修改</p>
       <p>密码修改</p>
-      <p>退出登录</p>
-      <p>注销账号</p>
+      <p @click="logout">退出登录</p>
+      <p @click="popupDelete.open('center')">注销账号</p>
     </view>
     <view>
-      <uni-popup ref="popup" type="dialog">
+      <uni-popup ref="popupChangeName" type="dialog">
         <uni-popup-dialog
           v-model="newName"
           title="修改昵称"
           mode="input"
           :placeholder="userInfo.username"
-          message="成功消息"
           :duration="2000"
           :before-close="true"
           @close="
             newName = '';
-            popup.close();
+            popupChangeName.close();
           "
           @confirm="
             confirmName();
-            popup.close();
+            popupChangeName.close();
+          "
+        ></uni-popup-dialog>
+      </uni-popup>
+      <uni-popup ref="popupDelete" type="dialog">
+        <uni-popup-dialog
+          title="注销账号"
+          type="error"
+          content="确定要注销账号吗？"
+          :duration="2000"
+          :before-close="true"
+          @close="popupDelete.close()"
+          @confirm="
+            deleteUser();
+            popupDelete.close();
           "
         ></uni-popup-dialog>
       </uni-popup>
@@ -90,6 +152,7 @@ onMounted(getUser);
     img {
       width: 100rpx;
       height: 100rpx;
+      object-fit: cover;
       border: solid $uni-text-color-grey 1px;
       margin: 10rpx;
       border-radius: 50%;

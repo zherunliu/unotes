@@ -80,7 +80,7 @@ const handleSelect = (e: any) => {
   imgList.value = [{ url: tempFilePath }];
   uni.uploadFile({
     fileType: "image",
-    url: baseUrl + "upload",
+    url: baseUrl + "/upload",
     filePath: tempFilePath,
     name: "file",
     success: (uploadFileRes) => {
